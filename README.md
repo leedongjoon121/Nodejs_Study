@@ -18,6 +18,8 @@
 * [1. 노드기본](#노드기본)
 * [2. 노드의기본기능](#노드의기본기능)
 * [3. 이벤트기본(EventEmitter)](#이벤트기본)
+* [4. 파일다루기(fs)](#파일다루기)
+
 
 <br/>
 
@@ -185,9 +187,50 @@ main.js라고가정
 
 #### 결과
 Calc에 stop event 전달됨.
+calculator에 stop 이벤트 전달함.
 
 <br/>
 
-calculator에 stop 이벤트 전달함.
+# 파일다루기
+#### 노드의 파일 시스템은 파일을 다루는 기능과 디렉터리를 다루는 기능으로 구성되어 있다.
+#### 동기식 IO 방식과 비동기식 IO 기능을 함께 제공한다.
+- 동기식 IO는 파일 작업이 끝날때 까지 대기, 비동기식 IO는 파일 작업을 요청만 하고 그 다음작업을 바로 수행
+- 동기식 IO와 비동기식 IO를 구분하기 위해 동기식 IO는 Sync라는 단어를 붙임
 
+동기식
+```swift
+    var fs = require('fs');
+    var data = fs.readFileSync('./README.md','utf8'); // 파일을 동기식으로 읽음
+    console.log(data); // 읽어들인 데이터 출력
+```
 
+비동기식
+```swift
+  var fs = require('fs');
+  fs.readFile('./README.md','utf8',function(err,data){ // 파일을 비동기식으로 읽음
+     console.log(data); // 읽은 데이터 출력
+  });
+```
+
+보통 비동기식 방식을 더 많이 쓴다.
+
+#### fs모듈 메서드정리
+1. readFile(filename,[encoding],[callback])   : 비동기식 IO로 파일을 읽어옴
+2. readFileSync(filename,[encoding])   : 동기식 IO로 파일을 읽어옴
+3. writeFile(filename,encoding='utf8',[callback])   : 비동기식 IO로 파일을 작성
+4. writeFileSync(filename,data,encoding='utf8')   : 동기식 IO로 파일을 작성
+
+```swift
+  var = require('fs');
+  fs.writeFile('./text.txt','HelloWorld',function(err){ // 파일에 데이터  쓰기
+    if(err){
+       console.log(err);
+    }
+  });
+```
+
+#### 스트림 단위로 파일 읽고 쓰기
+파일을 읽거나 쓸때 데이터 단위가 아니라 스트림 단위로 처리 할 수도 있다.
+1. createReadStream(path[,options])    : 파일을 읽기 위한 스트림 객체를 만듬
+2. createWriteStream(path[,options])     : 파일을 쓰기 위한 스트림 객체를 만듬
+옵션으로는 flags,encoding,autoClose 속성이 들어 있는 자바스크립트 객체를 전달 할 수 있다.
