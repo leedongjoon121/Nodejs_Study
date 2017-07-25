@@ -25,24 +25,24 @@
 
 # 노드
 
-### 1.노드의 비동기 입출력 방식
+## 1.노드의 비동기 입출력 방식
 노드는 하나의 요청처리가 끝날때까지 기다리지않고 다른 요청을 동시에 처리할 수 있는 비동기 입출력(논블로킹 입출력 방식)이다
 - 파일 시스템에 읽기 요청을 한 후에 프로그램이 대기하지 않고 다른 작업을 진행 한다.
 - 프로그램에서 해당 파일의 내용을 처리할 수 있는 시점이 되면 콜백함수가 호출된다.
 - 파일시스템은 파일처리가 끝나면 자동으로 콜백 함수를 호출한다. 
 
-### 콜백함수
+## 콜백함수
 자바스크립트에서는 변수에 함수를 할당할 수 있다. (1급 객체의 특성) 따라서 변수에 할당된 함수를 다른 함수의 파라미터로 전달할 수 있다.
 이렇게 파라미터로 전달된 함수를 다른 함수의 내부에서 호출하는 것이 콜백 함수를 뜻한다.
 
-### 이벤트 기반 입출력 모델
+## 이벤트 기반 입출력 모델
 - 파일 읽기가 완료 되었을 때, 파일 시스템에서 콜백 함수를 호출하는데, 파일 시스템이 이벤트와 함께 호출하는 방식이면 이벤트 기반 입출력 모델이라 부름
 - 파일 시스템에서 파일 읽기가 완료 되었다는 이벤트만 전달하면 프로그램에서는 그 이벤트를 받아 콜백함수를 실행할 수 있으며, 콜백 함수는 이벤트가 발생하기
 전에 미리 등록 한다.
 
 <br/>
 
-### http 프로토콜을 이용한 데이터 송수신 개념 => 추후 업로드를 통해 더 깊이 있게 들어갈 예정
+## http 프로토콜을 이용한 데이터 송수신 개념 => 추후 업로드를 통해 더 깊이 있게 들어갈 예정
 
 ```swift
    http.request(options,function(res){  // 외부 웹서버에 요청
@@ -61,7 +61,7 @@
   
 <br/>
 
-### 노드의  모듈 사용 방식
+## 노드의  모듈 사용 방식
 노드에서는 필요한 기능을 별도의 자바스크립트로 만든후 필요할 때마다 불러올 수 있다. 다만 이 형태는 CommonJS 표준 스펙을 따른다.
 - CommonJS는 자바스크립트를 브라우저뿐만 아니라 서버쪽 프로그램이나 PC용 프로그램에서도 사용하려고 조직한 자발적인 워킹 그룹이다
 - CommonJS 표준스펙은 자바스크립트 코드를 별도의 모듈 파일로 분리시키고 필요할 때 불러와 사용할 수 있는 방식을 정의해둔 표준.
@@ -81,10 +81,10 @@
 
 <br/>
 
-### 모듈 분리하기의 예 (exports 전역객체)
+## 모듈 분리하기의 예 (exports 전역객체)
 노드는 CommonJS의 표준스펙을 따라 모듈을 사용할 수 있으며, 이 과정에서 exports 전역 객체를 사용 한다.
-#### 모듈을 생성 할때 : exports 객체의 속성으로 변수나 함수를 지정하면 다른 자바스크립트 파일에서 불러와 사용 가능
-#### 모듈을 불러올 때 : require()메소드를 사용하며, 모듈로 만들어 둔 파일의 이름을 메소드의 파라미터로 전달
+### 모듈을 생성 할때 : exports 객체의 속성으로 변수나 함수를 지정하면 다른 자바스크립트 파일에서 불러와 사용 가능
+### 모듈을 불러올 때 : require()메소드를 사용하며, 모듈로 만들어 둔 파일의 이름을 메소드의 파라미터로 전달
 exports 뿐만 아니라 module.exports를 사용할 수도 있다. module.exports는 일반적으로 객체를 그대로 할당 하며, 이렇게 할당한 객체 안에 넣어둔
 변수나 함수를 메인 파일에서 사용 가능
 
@@ -105,16 +105,16 @@ exports 뿐만 아니라 module.exports를 사용할 수도 있다. module.expor
     module.exports = calc;
 ```
 
-### npm
+## npm
 Node Package Manager의 약자로 노드의 패키지를 사용할 수 있도록 설치 및 삭제 등을 지원하는 프로그램 
 
 # 노드의기본기능
 
-### 주소 문자열과 요청 파라미터
+## 주소 문자열과 요청 파라미터
 웹사이트에 접속하기 위한 주소 정보는 노드에서 URL 객체로 만들수 있다.
 - url 모듈을 이용해 주소 문자열을 객체로 만들면 문자열 안에 있던 각각의 정보를 나누어 그 객체의 속성으로 보관한다.
 
-#### 주요메서드
+### 주요메서드
 1. parse() : 주소 문자열을 파싱하여 url객체 만들어줌
 2. format() : url 객체를 주소 문자열로 변환함
 
@@ -141,15 +141,16 @@ Node Package Manager의 약자로 노드의 패키지를 사용할 수 있도록
 # 이벤트기본
 노드는 대부분 이벤트를 기반으로 하는 비동기 방식으로 처리 한다. 그리고 비동기 방식으로 처리 하기 위해 서로 이벤트를 전달.
 노드에는 이벤트를 보내고 받을 수 있도록 EventEmitter라는 것이 만들어져 있다.
-### 이벤트 주고 받는 과정
+
+## 이벤트 주고 받는 과정
 1. EventEitter 상속 -> 2.리스너 등록(on()) -> 3.이벤트전달(emit()) -> 4. 리스너함수호출(이벤트리스너)
 
-### EventEmitter
+## EventEmitter
 1. on(event,listener) : 지정한 이벤트의 리스너를 추가
 2. once(event,listener) : 지정한 리스너를 추가하지만 한번 실행한 후 자동 제거
 3. removeListener(event,listener) : 지정한 이벤트에 대한 리스너를 제거
 
-### 간단한 계산기 예제로 확인
+## 간단한 계산기 예제로 확인
 calfunction.js 라고 가정
 
 ```swift
@@ -185,15 +186,15 @@ main.js라고가정
    console.log(Calcfunc.title + '에 stop 이벤트 전달함');
 ```
 
-#### 결과
+### 결과
 Calc에 stop event 전달됨.
 calculator에 stop 이벤트 전달함.
 
 <br/>
 
 # 파일다루기
-#### 노드의 파일 시스템은 파일을 다루는 기능과 디렉터리를 다루는 기능으로 구성되어 있다.
-#### 동기식 IO 방식과 비동기식 IO 기능을 함께 제공한다.
+### 노드의 파일 시스템은 파일을 다루는 기능과 디렉터리를 다루는 기능으로 구성되어 있다.
+### 동기식 IO 방식과 비동기식 IO 기능을 함께 제공한다.
 - 동기식 IO는 파일 작업이 끝날때 까지 대기, 비동기식 IO는 파일 작업을 요청만 하고 그 다음작업을 바로 수행
 - 동기식 IO와 비동기식 IO를 구분하기 위해 동기식 IO는 Sync라는 단어를 붙임
 
@@ -214,7 +215,7 @@ calculator에 stop 이벤트 전달함.
 
 보통 비동기식 방식을 더 많이 쓴다.
 
-#### fs모듈 메서드정리
+### fs모듈 메서드정리
 1. readFile(filename,[encoding],[callback])   : 비동기식 IO로 파일을 읽어옴
 2. readFileSync(filename,[encoding])   : 동기식 IO로 파일을 읽어옴
 3. writeFile(filename,encoding='utf8',[callback])   : 비동기식 IO로 파일을 작성
@@ -229,8 +230,45 @@ calculator에 stop 이벤트 전달함.
   });
 ```
 
-#### 스트림 단위로 파일 읽고 쓰기
+### 스트림 단위로 파일 읽고 쓰기
 파일을 읽거나 쓸때 데이터 단위가 아니라 스트림 단위로 처리 할 수도 있다.
 1. createReadStream(path[,options])    : 파일을 읽기 위한 스트림 객체를 만듬
 2. createWriteStream(path[,options])     : 파일을 쓰기 위한 스트림 객체를 만듬
 옵션으로는 flags,encoding,autoClose 속성이 들어 있는 자바스크립트 객체를 전달 할 수 있다.
+
+```swift
+  var fs =require('fs');
+  var inname = './output.txt';  
+  var outname = './output2.txt';
+  
+  fs.exists(outname,function(exists){ // 기존에 output2.txt가 존재하면 제거
+    if(exists){ // 존재하면
+      fs.unlink(outname, function(err){ // 이전 파일삭제
+        if(err) throw err;
+        console.log('기존파일 ['+outname+'] 삭제함');
+      });
+    }
+    
+    var infile = fs.createReadStream(inname, {flags : 'r'}); 
+    var outfile = fs.createWriteStream(outname, {flags : 'w'});
+    
+    infile.pipe(outfile); // pipe() 메서드로 두개의 스트림을 붙임
+                          // WriteStream 타입 객체와 ReadStream 타입의 객체를 붙여주면 스트림간에 데이터를 알아서 전달함
+    console.log('파일복사['+inname+'] -> ['+outname+']');
+  });
+  
+```
+
+### http 모듈로 요청받은 파일 내용을 읽고 응답
+```swift
+   var fs = require('fs');
+   var http = require('http');
+   
+   var server = http.createServer(function(req,res){
+      var instream = fs.createReadStream('./output.txt'); // 파일을 읽어 응답 스트림과 pipe로 연결
+      instream.pipe(res); // 파일에서만든 스트림객체와 웹서버에서 만든 스트림객체를 pipe()로 연결
+});
+   server.listen(3000,'127.0.0.1');
+```
+
+
