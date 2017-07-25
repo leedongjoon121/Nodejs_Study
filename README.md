@@ -17,6 +17,7 @@
 
 * [1. 노드기본](#노드기본)
 * [2. 노드의기본기능](#노드의기본기능)
+* [3. 이벤트기본(EventEmitter)](#이벤트기본)
 
 <br/>
 
@@ -107,6 +108,86 @@ Node Package Manager의 약자로 노드의 패키지를 사용할 수 있도록
 
 # 노드의기본기능
 
-## branch1에서 확인 하실 수 있습니다.
+### 주소 문자열과 요청 파라미터
+웹사이트에 접속하기 위한 주소 정보는 노드에서 URL 객체로 만들수 있다.
+- url 모듈을 이용해 주소 문자열을 객체로 만들면 문자열 안에 있던 각각의 정보를 나누어 그 객체의 속성으로 보관한다.
+
+#### 주요메서드
+1. parse() : 주소 문자열을 파싱하여 url객체 만들어줌
+2. format() : url 객체를 주소 문자열로 변환함
+
+```swift
+  var url = require('url');
+  var querystr = require('querystring');
+  
+  var urlObj = url.parse('https://www.~~~~~'); // 주소 문자열 -> url 객체
+  console.log(urlObj);  // 객체 타입으로 찍힘
+  var urlStr = url.format(urlObj);
+  console.log('주소문자열 : %s',urlStr); // 주소 문자열로 찍힘
+  
+  // querystring 모듈을 이용해 더 쉽게 분리
+  /*
+    1. parse() : 요청 파라미터 문자열을 파싱하여 요청 파라미터 객체로 만들어줌
+    2. stringify() : 요청 파라미터 객체를 문자열로 변환
+
+  var param = querystr.parse(urlObj.query);
+  console.log('요청 파라미터 중 query값 : %s',param.query);
+  console.log('원본 요청 파라미터 : %s', querystr.stringify(param));
+  */
+```
+
+# 이벤트기본
+노드는 대부분 이벤트를 기반으로 하는 비동기 방식으로 처리 한다. 그리고 비동기 방식으로 처리 하기 위해 서로 이벤트를 전달.
+노드에는 이벤트를 보내고 받을 수 있도록 EventEmitter라는 것이 만들어져 있다.
+### 이벤트 주고 받는 과정
+1. EventEitter 상속 -> 2.리스너 등록(on()) -> 3.이벤트전달(emit()) -> 4. 리스너함수호출(이벤트리스너)
+
+### EventEmitter
+1. on(event,listener) : 지정한 이벤트의 리스너를 추가
+2. once(event,listener) : 지정한 리스너를 추가하지만 한번 실행한 후 자동 제거
+3. removeListener(event,listener) : 지정한 이벤트에 대한 리스너를 제거
+
+### 간단한 계산기 예제로 확인
+calfunction.js 라고 가정
+
+```swift
+   var util = require('util');
+   var EventEmitter = require('events').EventEmitter;    // EventEmitter는 event 모듈안에 정의되어 있다.
+
+   
+   var Calc = function(){
+     var self = this;
+     
+     this.on('stop',function(){ // emit을 보낸 이벤트에 대한 리스너로서의 기능을 수행 할 수 있다.
+                                // EventEmitter를 상속 받아서 on 메서드 사용 가능함
+       console.log('Calc에 stop event 전달됨.');
+     });
+   };
+   
+   util.inherits(Calc,EventEmitter); // Calc 객체가 이벤트처리를 할 수 있도록 EventEmitter를 상속하도록 만듬
+   
+   Calc.prototype.add = function(a,b){ // Calc 객체에 add 함수추가
+     return a+b;
+   }
+   
+   module.exports = Calc; // 모듈을 불러들이는 쪽에서 Calc 객체 참조
+   module.exports.title = 'calculator'; // title속성값으로 string 할당
+```
+
+main.js라고가정
+```swift
+   var Calcfunc = require('./calfunction'); // calfunction의 Calc를 사용가능
+   var cal = new Calcfunc(); // 인스턴스 생성
+     cal.emit('stop'); // Calc 객체가 EventEmitter를 상속하므로 인스턴스 객체의 emit()메소드 호출하여 stop이벤트 전달
+   
+   console.log(Calcfunc.title + '에 stop 이벤트 전달함');
+```
+
+#### 결과
+Calc에 stop event 전달됨.
+
+<br/>
+
+calculator에 stop 이벤트 전달함.
 
 
