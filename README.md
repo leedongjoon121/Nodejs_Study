@@ -19,6 +19,8 @@
 * [2. 노드의기본기능](#노드의기본기능)
 * [3. 이벤트기본(EventEmitter)](#이벤트기본)
 * [4. 파일다루기(fs)](#파일다루기)
+* [5. 웹서버기본](#웹서버)
+* [6. 웹클라이언트요청](#웹클라이언트요청)
 
 
 <br/>
@@ -271,4 +273,143 @@ calculator에 stop 이벤트 전달함.
    server.listen(3000,'127.0.0.1');
 ```
 
+<br/>
 
+# 웹서버
+### http모듈을 활용한 웹 서버
+http모듈은 노드에 기본으로 내장되어 있으며, http 모듈을 로딩했을때 반환되는 객체에는 createserver()메서드가 정의 되어 있다.
+```swift
+   var http = require('http');
+   var server = http.createServer();
+   
+   server.listen(3000,function(){
+     console.log("server port is 3000 ");
+   });
+   
+   /*
+   // 특정 ip를 지정하여 서버를 실행할 때
+    server.listen(3000,'192.168.0.5','50000',function(){
+        console.log("포트 : 3000, host : 192.168.0.5, backlog : 50000");
+    });
+   */
+```
+
+### 클라이언트가 웹서버에 요청할때 발생하는 이벤트 처리
+1. connection : 클라이언트가 접속하여 연결이 만들어질 때 발생하는 이벤트
+2. request : 클라이언트가 요청할 때 발생하는 이벤트
+3. close : 서버를 종료할 때 발생하는 이벤트 
+
+```swift
+  var http = request('http');
+  var server = http.createServer();
+  
+  server.listen(3000,function(){ 
+     console.log("웹 서버 켜짐, 포트는 3000");
+  });
+  
+  
+  // 웹 브라우저와 같은 클라이언트가 웹 서버에 연결되면 connection 이벤트 발생
+  server.on('connection',function(socket){ // socket에는 클라이언트 연결정보가 담겨있음
+   var addr = socket.address(); // 클라이언트의 ip와 port를 알 수 있음
+     console.log('클라이언트가 접속 했음 : %s, %d',addr.address, addr.port);
+  });
+  
+  
+  // 클라이언트가 특정 패스로 요청하면 request 이벤트 발생
+  server.on('request',function(req,res){
+     console.log("클라이언트 요청이 들어옴");
+     console.dir(req);
+     
+     res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"}); // 응답으로 보낼 헤더를 만듬
+     res.write("<!DOCTYPE html>");
+     res.write("<html>");
+     res.write("  <head>");
+     res.write("    <title>응답페이지</title>");
+     res.write("  </head>");
+     res.write("  <body>");
+     res.write("    <h1>노드제이에스로부터의 응답 페이지</h1>");
+     res.write("  </body>");
+     res.write("</html>");
+     res.end(); // 응답을 모두보냈다. end()메서드가 호출될 때 클라이언트로 응답을 전송
+  });
+  
+  server.on('close',function(){
+    console.log("서버가 종료");
+  });
+```
+
+request 관련 메서드
+1. writeHead : 응답으로 보낼 헤더를 만듬
+2. write : 응답 본문(body)데이터를 만듬, 여러번 호출 가능
+3. end : 클라이언트로 응답을 전송, 파라미터에 데이터가 들어 있으면 데이터를 포함해서 응답 전송
+
+<br/>
+
+# 웹클라이언트요청
+http 모듈을 이용하여 클라이언트의 기능을 활용하고, http 클라이언트가 get과 post방식으로 다른 웹 서버에 데이터를 요청
+### get 방식
+
+```swift
+  var http  = require('http');
+  var options = {
+        host : 'www.google.com',
+        port : 80,
+        path : '/'
+      };
+  var req = http.get(options,function(res){
+  //응답처리
+  var resData = '';
+  res.on('data',function(chunk){
+    resData += chunk;
+  });
+  
+  res.on('end',function(){
+    console.log(resData);
+  });
+  });
+  
+  req.on('error',function(err){
+    console.log("오류발생 : "+ err.message);
+  });
+```
+http 객체의 get() 메서드를 사용하면 다른 사이트에 요청을 보내고 응답을 받아 처리할 수 있다.
+다른 서버로 부터 응답을 받을 때는 data이벤트가 발생한다.
+
+### post 방식
+post 방식으로 요청할 경우에는 request()메소드를 사용한다.
+post 방식으로 요청을 보낼 때에는 요청 헤더와 본문을 모두 직접 설정해야 한다.
+```swift
+  var http = require('http');
+  var options = {
+      host : 'www.google.com',
+      port : 80,
+      method : 'POST',
+      path : '/',
+      headers : {}
+  }; // 물론 구글사이트는 post요청을 받지못한다, post메서드로 요청할 수있는 다른사이트에서는 정상작동한다.
+  
+  var resData = '';
+  var req = http.request(options,function(){
+   // 응답 처리 
+   res.on('data',function(chunk){
+     resData += chunk;
+   });
+   
+   res.on('end',function(){
+     console.log(resData);
+   });
+  });
+  
+  options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  req.data = "q=actor";
+  options.headers['Content-Length'] = req.data.length;
+  
+  req.on('error',function(err){
+    console.log("오류발생"+err.message);
+  });
+  
+  //요청전송
+  req.write(req.data);
+  req.end();
+  };
+```
