@@ -105,3 +105,34 @@ express 모듈 기본 규격
 
 1,2 방식은 req.param() 으로 참조 가능
 
+### static 미들웨어
+static 미들웨어는 특정 폴더의 파일들을 특정 패스로 접근할 수 있도록 만들어줌, 예를들어 [public] 폴더에 있는 모든 파일을 웹 서버의 루트패스로
+접근할 수 있도록 만들고 싶으면
+
+app.use(express.static(path.join(__dirname,'public')));  => 이렇게하면 [public] 폴더 안에 있는 파일들은 클라이언트에서 바로 접근 가능
+
+아래와 같이 웹 브라우저에서 바로 접근 가능하다
+```swift
+   ExpressApp/public/index.html   =>   http://localhost:3000/index.html
+   ExpressApp/public/js/main.js   =>   http://localhost:3000/js/main.js
+   ExpressApp/public/images/house.png   =>   http://localhost:3000/images/house.png
+```
+
+예를 들어 public/images에 있는 house.png 이미지 파일을 웹 브라우저에서 보려면 app.js에서 아래와 같이 보내면 된다
+```swift
+    res.end("<img src = 'images/house.png' width = '50%'>");
+```
+
+추가로,  [public]폴더 안에 있는 파일을 사이트의 /public 패스로 접근하도록 만들고 싶으면 아래와 같이 보내면 된다.
+```swift
+   app.use('/public',express.static(path.join(__dirname,'public')));
+   // static() 메서드로 특정 폴더를 지정하였기 때문에 요청패스와  특정 폴더가 매핑 되어 접근 가능
+```
+
+### body-parser 미들웨어 => POST로 요청했을때 요청파라미터를 확인할 수 있음
+GET 방식으로 요청할 때에는 주소  문자열에 요청 파라미터가 들어간다. 하지만 POST방식은 본문인 본문영역(body 영역)에 요청파라미터가 들어가 있게 된다.
+body-parser 미들웨어는 클라이언트가 POST방식으로 요청할 때 본문 영역에 있는 요청 파라미터들을 파싱하여 요청 객체와 params 속성에 넣어준다.
+
+
+
+
