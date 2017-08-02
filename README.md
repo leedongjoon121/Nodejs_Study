@@ -133,6 +133,61 @@ app.use(express.static(path.join(__dirname,'public')));  => 이렇게하면 [pub
 GET 방식으로 요청할 때에는 주소  문자열에 요청 파라미터가 들어간다. 하지만 POST방식은 본문인 본문영역(body 영역)에 요청파라미터가 들어가 있게 된다.
 body-parser 미들웨어는 클라이언트가 POST방식으로 요청할 때 본문 영역에 있는 요청 파라미터들을 파싱하여 요청 객체와 params 속성에 넣어준다.
 
+index.html이라고가정
+```swift
+    <form method="post" >
+    <table>
+       <tr>
+          <td><label>아이디</label></td>
+          <td><input type="text" name="id" /></td>
+       </tr>
+       <tr>
+          <td><label>비밀번호</label></td>
+          <td><input type="password" name="password" /></td>
+       </tr>
+    </table>
+    <input type="submit" value="전송" name=""/>
+	</form>
+```
+
+app.js 라고 가정
+```swift
+  ... 기타 설정이 되었다고 가정
+  
+   // body-parser를 이용해 application/x-www-form-urlencoded 파싱
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  // body-parser를 이용해 application/json 파싱
+  app.use(bodyParser.json());
+  
+  // 미들웨어에서 파라미터 확인
+ app.use(function(req, res, next) {
+	console.log('첫번째 미들웨어에서 요청을 처리함.');
+
+	var paramId = req.body.id || req.query.id;   // req.body.name은 Post 방식, req.query.name은 Get방식
+	var paramPassword = req.body.password || req.query.password; // 둘중 하나 넘어오면 값을 할당
+
+  // 여기서 정의한 규격만 클라이언트에 날라감 
+	res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+	res.write('<h1>Express 서버에서 응답한 결과입니다.</h1>');
+	res.write('<div><p>Param id : ' + paramId + '</p></div>');
+	res.write('<div><p>Param password : ' + paramPassword + '</p></div>');
+	res.end();  // 클라이언트로 최종 제출
+});
+
+```
+
+### 라우터 미들웨어
+사용자가 요청한 기능이 무엇인지 패스를 기준으로 구별할 수 있음
+- get(path,callback)    :  GET방식으로 특정 패스 요청이 발생 했을때 사용할  콜백 함수를 지정
+- post(path,callback)     :   POST방식으로 특정 패스 요청이 발생 했을때 사용할  콜백 함수를 지정
+- put(path,callback)      : PUT방식으로 특정 패스 요청이 발생 했을때 사용할  콜백 함수를 지정
+- delete(path,callback)     : DELETE방식으로 특정 패스 요청이 발생 했을때 사용할  콜백 함수를 지정
+- all(path,callback)      :  모든 요청 방식을 처리하며, 특정 패스 요청이 발생 했을때 사용할  콜백 함수를 지정
+
+예를 들어 클라이언트에서 GET 방식으로 요청할 때에는 익스프레스에서 get()메소드를 사용해 함수를 등록해야 하며, POST방식으로 요청할 때에는 post()메소드를 사용해서 등록 해야함   => 각기 다 맞춰야함
+
+
 
 
 
