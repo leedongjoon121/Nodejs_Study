@@ -187,7 +187,26 @@ app.js 라고 가정
 
 예를 들어 클라이언트에서 GET 방식으로 요청할 때에는 익스프레스에서 get()메소드를 사용해 함수를 등록해야 하며, POST방식으로 요청할 때에는 post()메소드를 사용해서 등록 해야함   => 각기 다 맞춰야함
 
+<br/>
 
+### express 기본예제
+- static, body-parser, router 미들웨어 사용
+
+예제코드는 <a href = "https://github.com/leedongjoon121/Nodejs_Study/tree/express_ex1">express_ex1</a> 브랜치
+
+<br/>
+
+간단한 form태그를 이용한 post전송 후 body-parser모듈을 통해 본문영역(body)의 요청 파라미터를 전송받음
+
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/express1_3.PNG?raw=true)
+
+post전송
+
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/express1_1.PNG?raw=true)
+
+결과값
+
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/express1_2.PNG?raw=true)
 
 
 
