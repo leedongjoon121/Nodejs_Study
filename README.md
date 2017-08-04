@@ -238,6 +238,69 @@ multer 미들웨어를 사용하는데, 파일을 업로드 한 후 파일을 �
 
 => dest 속성으로 지정한 폴더는 프로젝트 폴더 안에 만들어져 있어야 함
 
+```swift
+
+ ...
+ 
+  app.use(bodyParser.urlencoded({extended:true}));
+  app.use(cookiePaser());
+  app.use(expressSession(){
+       secret:'my key',
+       resave:true,
+       saveUninitialized:true
+  });
+  
+  app.use(multer(){
+    dest:'uploads',
+    pugSingleFilesInArray:true,
+    limits:{
+      files: 10,
+      fileSize: 1024 * 1024
+    },
+    rename: function(fieldname, filename){
+     return filename+Date.now();
+    },
+    onFileUploadStart: function(file){
+      console.log('파일 업로드 시작 : '+file.fieldname + '->' + file.path);
+    },
+    
+    onFileUploadComplete: function(file, req, res){
+      console.log('파일 업로드 완료 : '+file.fieldname + '->' + file.path);
+    },
+    
+    onFileSizeLimit: function(file){
+      console.log('파일 크기 제한 초과 : %s'+file.originalname);
+    }
+    
+  });
+ 
+ ....
+
+```
+
+위의 속성들을 분류 하지 않고 아래와 같이 storage객체와 upload객체를 생성하여 처리하여도 된다.
+
+```swift
+    ar storage = multer.diskStorage({
+    destination: function (req, file, callback) {   // 파일이 저장될 위치
+        callback(null, 'uploads')    // 여기서는  uploads 폴더에 저장한다.
+    },
+    filename: function (req, file, callback) {   // 이미지가 저장될 파일 이름을 설정한다.
+        callback(null, file.originalname + Date.now())
+    }
+});
+
+var upload = multer({ // multer 설정 객체
+    storage: storage,
+    limits: {
+		files: 10,
+		fileSize: 1024 * 1024 * 1024
+	}
+});
+
+```
+
+
 클라이언트 요청 처리 함수
 
 ```swift
