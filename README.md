@@ -11,6 +11,12 @@
 ### email : ehdwns46@naver.com
 
 <hr/>
+
+## 각 기능별 branch(각 브렌치는 연관이없습니다. 각기 다른 용도의 저장소로 활용중 입니다.)
+### <a href = "https://github.com/leedongjoon121/Nodejs_Study/tree/express">express모듈 브랜치</a>
+### <a href = "">MonggoDB 브랜치</a>
+
+
 <br/>
 
 ## 목차
@@ -21,7 +27,7 @@
 * [4. 파일다루기(fs)](#파일다루기)
 * [5. 웹서버기본](#웹서버)
 * [6. 웹클라이언트요청](#웹클라이언트요청)
-* [7. express모듈](#express모듈)
+
 
 
 <br/>
@@ -415,7 +421,5 @@ post 방식으로 요청을 보낼 때에는 요청 헤더와 본문을 모두 �
   };
 ```
 
-# express모듈
-### express 모듈은 <a href = "https://github.com/leedongjoon121/Nodejs_Study/tree/express">express branch</a>에서 확인  
 
 
