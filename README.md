@@ -279,7 +279,9 @@ multer 미들웨어를 사용하는데, 파일을 업로드 한 후 파일을 �
 ```
 
 ### 실습 예제
-예제 코드는 <a href = "https://github.com/leedongjoon121/Nodejs_Study/tree/express_multer/">express_multer</a>브랜치
+### 예제 코드는 <a href = "https://github.com/leedongjoon121/Nodejs_Study/tree/express_multer/">express_multer</a>브랜치
+
+<br/>
 
 위의 속성들을 분류 하지 않고 아래와 같이 storage객체와 upload객체를 생성하여 처리하여도 된다.
 
