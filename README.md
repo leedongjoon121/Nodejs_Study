@@ -4,6 +4,8 @@
 * [1. express기본](#express기본)
 * [2. 미들웨어](#미들웨어)
 * [3. 매우 간단한 예제](#간단한예제)
+* [4. 파일업로드(multer)](#파일업로드)
+
 
 <br/>
 
@@ -213,5 +215,127 @@ post전송
 
 ## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/express1_2.PNG?raw=true)
 
+
+# 파일업로드
+
+파일을 업로드할 때에는 멀티파트(multipart)포맷으로 된 파일 업로드 기능을 사용하며 파일 업로드 상태 등을 확인할 수 있다.
+
+> 머티파트(multipart) : 멀티파트포맷은 음악이나 이미지 파일등을 일반 데이터와 함께 웹 서버로 보내려고 만든 표준이다.
+
+multer 미들웨어를 사용하는데, 파일을 업로드 한 후 파일을 다뤄야 하므로 fs 모듈도 추가해 준다.
+
+- multer 미들웨어를 사용하려면 app.use()메서드와 multer()미들웨어 함수를 동시에 호출하여 반환된 객체를 파라미터로 넘거야 한다.
+
+### multer 미들웨어를 사용할때 설정하는 주요 속성과 메서드는 다음과 같다.
+
+1. dest : 업로드한 파일들이 저장될 폴더를 지정
+2. putSingleFilesInArray : 응답 객체의 files 속성에 업로드한 파일 정보를 클라이언트 요청 이름으로 넣을때, 파일이 한개라도 배열 형태로 넣을 것인지를 지정
+3. limits : 파일 크기나 파일 개수 등의 제한 속성을 설정하는 객체
+4. rename(fieldname, filename, req, res) : 업로드한 파일의 이름을 바꿈
+5. onFileUploadStart(file,req,res) : 파일 업로드가 시작될 때 호출
+6. onFileUploadComplete(file,req,res) : 파일 업로드가 완료될 때 호출
+7. onFileSizeLimit(file) : limits 객체에 설정한 제한을 넘어섰을때 호출
+
+=> dest 속성으로 지정한 폴더는 프로젝트 폴더 안에 만들어져 있어야 함
+
+클라이언트 요청 처리 함수
+
+```swift
+       <form method="post" enctype="multipart/form-data" action="/process/photo">
+		<table>
+			<tr>
+				<td><label>파일</label></td>
+				<td><input type="file" name="photo" /></td>
+				<!-- 여기서의 name 이 서버에서 처리할 때의 요청 객체에 들어 있는 files 객체 속성 이름 이거 맞춰야함-->
+			</tr>
+		</table>
+		<input type="submit" value="업로드" name="submit"/>
+	</form>
+```
+
+서버 파일
+
+```swift
+
+ .... 기타 설정 완료 
+ //multer 미들웨어 사용 : 미들웨어 사용 순서 중요  body-parser -> multer -> router
+// 파일 제한 : 10개, 1G
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, 'uploads')
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname + Date.now())
+    }
+});
+
+var upload = multer({ // multer 설정 객체
+    storage: storage,
+    limits: {
+		files: 10,
+		fileSize: 1024 * 1024 * 1024
+	}
+});
+
+
+// 라우터 사용하여 라우팅 함수 등록
+var router = express.Router();
+
+// 파일 업로드 라우팅 함수 - 로그인 후 세션 저장함
+router.route('/process/photo').post(upload.array('photo', 1), function(req, res) { 
+                        // 클라이언트에서 보낸 객체 이름이 photo임
+                        
+	console.log('/process/photo 호출됨.');
+	
+	try {
+		var files = req.files;
+	
+        console.dir('#===== 업로드된 첫번째 파일 정보 =====#')
+        console.dir(req.files[0]);
+        console.dir('#=====#')
+        
+		// 현재의 파일 정보를 저장할 변수 선언
+		var originalname = '',
+			filename = '',
+			mimetype = '',
+			size = 0;
+		
+		if (Array.isArray(files)) {   // 배열에 들어가 있는 경우 (설정에서 1개의 파일도 배열에 넣게 했음)
+	        console.log("배열에 들어있는 파일 갯수 : %d", files.length);
+	        
+	        for (var index = 0; index < files.length; index++) {
+	        	originalname = files[index].originalname;
+	        	filename = files[index].filename;
+	        	mimetype = files[index].mimetype;
+	        	size = files[index].size;
+	        }
+	        
+	    } else {   // 배열에 들어가 있지 않은 경우 (현재 설정에서는 해당 없음)
+	        console.log("파일 갯수 : 1 ");
+	        
+	    	originalname = files[index].originalname;
+	    	filename = files[index].name;
+	    	mimetype = files[index].mimetype;
+	    	size = files[index].size;
+	    }
+		
+		console.log('현재 파일 정보 : ' + originalname + ', ' + filename + ', '
+				+ mimetype + ', ' + size);
+		
+		// 클라이언트에 응답 전송
+		res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+		res.write('<h3>파일 업로드 성공</h3>');
+		res.write('<hr/>');
+		res.write('<p>원본 파일명 : ' + originalname + ' -> 저장 파일명 : ' + filename + '</p>');
+		res.write('<p>MIME TYPE : ' + mimetype + '</p>');
+		res.write('<p>파일 크기 : ' + size + '</p>');
+		res.end();
+		
+	} catch(err) {
+		console.dir(err.stack);
+	}	
+		
+});
+```
 
 
