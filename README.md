@@ -338,4 +338,12 @@ router.route('/process/photo').post(upload.array('photo', 1), function(req, res)
 });
 ```
 
+파일 전송
+
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/multer_file1.png?raw=true)
+
+파일 전송후
+
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/multer_file2.png?raw=true)
+
 
