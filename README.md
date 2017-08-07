@@ -19,16 +19,22 @@ show dbs
 ### 데이터베이스 삭제  : 반드시 데이터베이스가 선택되어 있어져야 한다 (use 명령어)
 db.dropDatabase()
 ### 데이터베이스는 db라는 이름으로 접근할 수 있고, 데이터베이스 안에 컬렉션을 만들고 그 안에서 문서를 저장할 수 있다.
+
+<br/>
+
 ### 컬렉션 생성  : 하지만 이렇게 직접 컬렉션을 만들지 않고 => db.컬렉션명.명령어 형식으로 바로 사용가능
 db.createCollection(name,[options])
 ### 컬렉션 제거 
 db.컬렉션이름.drop()
 ### 컬렉션 목록 확인 : show collections
+
+<br/>
+
 ## document 명령어
-### insert명령
+### 1.insert명령
 db.users.insert({"name":"홍길동","age":25});        : 컬렉션을 별도로 만들지 않고 자동으로 만들어짐
 > 배열의 형태로 넣고 싶을땐, db.users.insert([{"name":"김길동"},{"name":"박길동"}]);
-### find명령(찾기)
+### 2.find명령(찾기)
 db.users.find().pretty()           : users컬렉션에 있는 모든 문서 객체들을 반환함, pretty() 예쁘게 정렬해서 보여줌
-### remove 명령
+### 3.remove 명령
 db.users.remove({"name":"홍길동"})     => 이름이 홍길동인거 삭제
