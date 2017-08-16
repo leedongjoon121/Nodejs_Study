@@ -38,3 +38,15 @@ db.users.insert({"name":"홍길동","age":25});        : 컬렉션을 별도�
 db.users.find().pretty()           : users컬렉션에 있는 모든 문서 객체들을 반환함, pretty() 예쁘게 정렬해서 보여줌
 ### 3.remove 명령
 db.users.remove({"name":"홍길동"})     => 이름이 홍길동인거 삭제
+
+## 몽고디비 간단한 예제
+### <a href = "https://github.com/leedongjoon121/Nodejs_Study/tree/mongodb_ex">예제 브랜치</a>
+
+### index.html 
+- 몽고디비에 입력, 출력, 수정, 삭제 등을 할 수 있는 예제
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/mongoDB_main.png?raw=true)
+
+
+### mongoDB_data
+- 몽고디비 데이터
+## ![사진](https://github.com/leedongjoon121/Nodejs_Study/blob/document_img_file/project_img_file/mongoDB_data.png?raw=true)
